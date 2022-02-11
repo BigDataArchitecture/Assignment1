@@ -9,6 +9,9 @@ __pycache__/
 /data
 data/
 
+notebooks/SEVIR/
+docs/.DS_Store
+docs/codelabs.zip
 # Distribution / packaging
 .Python
 build/

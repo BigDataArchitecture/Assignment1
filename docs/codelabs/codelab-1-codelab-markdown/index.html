@@ -1,0 +1,172 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CodeLab for Assignment 1</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="codelab-1-codelab-markdown"
+                  title="CodeLab for Assignment 1"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Introduction 👋🏻" duration="2">
+        <h3 is-upgraded><strong>In this codelab we are going to see 2 things:</strong></h3>
+<ul>
+<li>SEVIR Data Analysis on a Sample ID</li>
+<li>How to work with Google Buckets, Google Data Studio and Big Query</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 550.00px" src="img/c01cc5048789274a.jpeg"></p>
+<p><strong>Resources:</strong></p>
+<ul>
+<li>NOAA&#39;s Storm Event Database:<a href="https://www.ncdc.noaa.gov/stormevents/ftp.jsp" target="_blank">Link to NOAA</a></li>
+<li><a href="https://github.com/MIT-AI-Accelerator/sevir_challenges" target="_blank">SEVIR</a> - The repository that contains SEVIR Data details</li>
+<li>SEVIR tutorial <a href="https://nbviewer.org/github/MIT-AI-Accelerator/eie-sevir/blob/master/examples/SEVIR_Tutorial.ipynb" target="_blank">SEVIR Tutorial</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/visualize-data-studio" target="_blank">Google Data Code</a> - great tutorial for Google Data Studio</li>
+<li><a href="https://medium.com/@mariopce/tutorial-how-to-make-tutorials-using-google-code-labs-gangdam-style-d62b35476816" target="_blank">A blog that we used when getting started with Google Codelabs</a></li>
+</ul>
+<p><strong>The Avengers</strong></p>
+<ul>
+<li>Ankana Asit Baran Samanta (Wonder Woman) 🦸🏼‍♀️</li>
+<li>Sreepad Parigi (Iron Man) 🦹‍♀️</li>
+<li>Parth Shah (Spider Man) 🕸</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Storm EVent ImagRy (SEVIR) 🌪" duration="4">
+        <h3 is-upgraded>What is Sevir 🌪 ❓</h3>
+<p>The Storm EVent ImagRy (SEVIR) dataset is a collection of temporally and spatially aligned images containing weather events captured by satellite and radar. This dataset was created using publically available datasets distributed by NOAA, including the GOES-16 geostationary satellite, and data derived from NEXRAD weather radars, both of which are available on the Registry of Open Data on AWS.</p>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/7ac2f9cdfdcdb331.gif"></p>
+<h3 is-upgraded>Question: Modify the ipynp with <strong>Event ID: 835047</strong></h3>
+<p>As the goal was to run on a single event id we did not really wanted to save almost 25 GB&#39;s of data on our machines so we did following steps!</p>
+<h4 is-upgraded><strong>STEP 1:</strong></h4>
+<p>We have created a function which takes input as the &#34;EVENT ID&#34; and return files required to download and index where this event is present in the that files</p>
+<pre><code language="language-python" class="language-python">def get_filename_index(event_id):
+    catlog = pd.read_csv(&#34;https://raw.githubusercontent.com/MIT-AI-Accelerator/eie-sevir/master/CATALOG.csv&#34;)
+    filtered = pd.DataFrame()
+    for i in event_id:
+        filtered = pd.concat([filtered,catlog[catlog[&#34;event_id&#34;] == int(i)]])
+        filename = filtered[&#39;file_name&#39;].unique()
+        fileindex = filtered[&#39;file_index&#39;].unique()
+    print(&#34;We have got the locations, Lets Download the files&#34;)    
+    return filename, fileindex
+</code></pre>
+<p>Output</p>
+<pre><code language="language-python" class="language-python">$ We have got the locations, Lets Download the files
+</code></pre>
+<h4 is-upgraded><strong>STEP 2:</strong></h4>
+<p>Once we know what files to download we use boto3 to download that specific files on our local machines.</p>
+<pre><code language="language-python" class="language-python">def download_hf(filename):
+    resource = boto3.resource(&#39;s3&#39;)
+    resource.meta.client.meta.events.register(&#39;choose-signer.s3.*&#39;, disable_signing)
+    bucket=resource.Bucket(&#39;sevir&#39;)
+    
+    for i in range(len(filename)):
+        filename1 = &#34;data/&#34; + filename[i]
+        print(&#34;Downloading&#34;,filename1)    
+        bucket.download_file(filename1 , &#34;SEVIR/&#34;+filename[i].split(&#39;/&#39;)[2])
+</code></pre>
+<p>Output</p>
+<pre><code language="language-python" class="language-python">$ We have got the locations, Lets Download the files
+</code></pre>
+<h4 is-upgraded><strong>STEP 3</strong></h4>
+<p>We make a new H5 format file which has all image type data for inputed EVENT ID. Making the process faster</p>
+<pre><code language="language-python" class="language-python">def One_Sample_HF(directory,fileindex):
+    filenames = next(walk(directory), (None, None, []))[2]  # [] if no file
+    for i in range(len(filenames)):
+        print(directory+filenames[i])
+        if filenames[i] == &#39;.DS_Store&#39;:
+            break
+        with h5py.File(directory+&#34;/&#34;+filenames[i],&#39;r&#39;) as hf:
+            image_type = filenames[i].split(&#39;_&#39;)[1]
+            if image_type == &#34;IR107&#34;:
+                event_id = hf[&#39;id&#39;][int(fileindex[1])]
+                IR107 = hf[&#39;ir107&#39;][int(fileindex[1])]
+            if image_type == &#34;VIL&#34;:
+                VIL = hf[&#39;vil&#39;][int(fileindex[3])]
+            if image_type == &#34;IR069&#34;:
+                IR069 = hf[&#39;ir069&#39;][int(fileindex[2])]
+            if image_type == &#34;VIS&#34;:
+                VIS = hf[&#39;vis&#39;][12]
+    hf1 = h5py.File(str(event_id)+&#39;Sample.h5&#39;, &#39;w&#39;)
+    hf1.create_dataset(&#39;vil&#39;, data=VIL)
+    hf1.create_dataset(&#39;vis&#39;, data=VIS)
+    hf1.create_dataset(&#39;IR107&#39;, data=IR107)
+    hf1.create_dataset(&#39;IR069&#39;, data=IR069)
+    print(&#34;Downloded&#34;)
+
+</code></pre>
+<p>Output</p>
+<pre><code language="language-python" class="language-python">$ Downloded
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Final Battle 🎬" duration="1">
+        <p>Well after we download the sample file rest all files are deleted. We have come down from <strong>23.75 GB</strong> to <strong>73 MB</strong></p>
+<p>Following are some output from our IPYNP File:</p>
+<ul>
+<li>Accessing an Event</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/617a6eb00f0dba3e.png"></p>
+<ul>
+<li>Including Lighting with Color</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/1909684ca66a1e19.png"></p>
+<ul>
+<li>Geographing the Event</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/56b0598da679827a.png"></p>
+<ul>
+<li>Bitmap Image</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/5e0a3c2678ed9cd6.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Intro to Google Cloud Platform 🌎" duration="2">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Connecting Buckets - Big Query - Data Studio ⸦" duration="2">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Final Dashboard 📖" duration="1">
+        
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

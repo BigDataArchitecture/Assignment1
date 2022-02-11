@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-02-10T03:15:13-05:00",
+  "id": "codelab-1-codelab-markdown",
+  "duration": 12,
+  "title": "CodeLab for Assignment 1",
+  "summary": "Big Data Architecture Assignment 1",
+  "source": "codelab.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "codelab",
+    "markdown"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "codelab-1-codelab-markdown"
+}
