@@ -12,6 +12,7 @@ data/
 notebooks/SEVIR/
 docs/.DS_Store
 docs/codelabs.zip
+notebooks/.DS_Store
 # Distribution / packaging
 .Python
 build/
