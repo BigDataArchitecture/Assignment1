@@ -27,7 +27,7 @@
                   environment="web"
                   feedback-link="">
     
-      <google-codelab-step label="Introduction 👋🏻" duration="2">
+      <google-codelab-step label="Introduction 👋🏻" duration="1">
         <h3 is-upgraded><strong>In this codelab we are going to see 2 things:</strong></h3>
 <ul>
 <li>SEVIR Data Analysis on a Sample ID</li>
@@ -52,11 +52,11 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Storm EVent ImagRy (SEVIR) 🌪" duration="4">
+      <google-codelab-step label="Storm EVent ImagRy (SEVIR) 🌪" duration="2">
         <h3 is-upgraded>What is Sevir 🌪 ❓</h3>
 <p>The Storm EVent ImagRy (SEVIR) dataset is a collection of temporally and spatially aligned images containing weather events captured by satellite and radar. This dataset was created using publically available datasets distributed by NOAA, including the GOES-16 geostationary satellite, and data derived from NEXRAD weather radars, both of which are available on the Registry of Open Data on AWS.</p>
 <p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/7ac2f9cdfdcdb331.gif"></p>
-<h3 is-upgraded>Question: Modify the ipynp with <strong>Event ID: 835047</strong></h3>
+<h3 is-upgraded>Question: Modify the ipynb with <strong>Event ID: 835047</strong></h3>
 <p>As the goal was to run on a single event id we did not really wanted to save almost 25 GB&#39;s of data on our machines so we did following steps!</p>
 <h4 is-upgraded><strong>STEP 1:</strong></h4>
 <p>We have created a function which takes input as the &#34;EVENT ID&#34; and return files required to download and index where this event is present in the that files</p>
@@ -124,7 +124,7 @@
     
       <google-codelab-step label="Final Battle 🎬" duration="1">
         <p>Well after we download the sample file rest all files are deleted. We have come down from <strong>23.75 GB</strong> to <strong>73 MB</strong></p>
-<p>Following are some output from our IPYNP File:</p>
+<p>Following are some output from our IPYNB File:</p>
 <ul>
 <li>Accessing an Event</li>
 </ul>
@@ -146,17 +146,72 @@
       </google-codelab-step>
     
       <google-codelab-step label="Intro to Google Cloud Platform 🌎" duration="2">
-        
+        <p>Google cloud platform(shortly called as &#34;GCP&#34;) is a public cloud vendor that offers a suite of computing services which are developed by Google. The platform includes a wide range of services that can be used in different sectors of cloud computing, such as storage and application development.</p>
+<p>Major services of GCP include:</p>
+<ul>
+<li>Computing and hosting</li>
+<li>Storage and database</li>
+<li>Networking</li>
+<li>Big Data</li>
+<li>Machine learning</li>
+</ul>
+<p>GCP services can be accessed in three ways:</p>
+<ul>
+<li>GCP Console (web-based GUI)</li>
+<li>Command-line Interface(CLI)</li>
+<li>Client Libraries</li>
+</ul>
+<p>GCP like many cloud providers offers pay-as-you-go pricing structure. We can only pay for the services that we use. We signed up for the 90 day, $300 free trial that lets us explore and evaluate GCP&#39;s products and services.</p>
+<p>The following GCP applications were used for this assignment:</p>
+<ul>
+<li>Google storage buckets <a href="https://cloud.google.com/storage/docs/creating-buckets" target="_blank">Creating Buckets</a></li>
+<li>Google BigQuery <a href="https://cloud.google.com/bigquery/docs/introduction" target="_blank">BigQuery Introduction</a></li>
+<li>Google Datastudio <a href="https://support.google.com/datastudio/answer/6283323?hl=en" target="_blank">DataStudio</a></li>
+</ul>
+<h3 is-upgraded><strong>Google Storage buckets:</strong></h3>
+<p>Sample data from Sevir&#39;s Amazon store were moved to Google storage bucket. As described in the 2nd page, the h5 files corresponding to the Event ID: 835047 gets downloaded through the code written in the ipynb file. These h5 files are then moved to the Google storage bucket.</p>
+<p>We can also download specific files using AWS CLI.</p>
+<h3 is-upgraded><strong>Google BigQuery:</strong></h3>
+<p>BigQuery was used to join the csv file(from the storm events csv files) which has the Event ID: 835047 with the records matching in the catalog.csv file. This was done for the years 2018 and 2019.</p>
+<h3 is-upgraded><strong>Google Data Studio:</strong></h3>
+<p>Data Studio was used to create visualizations on the data that we obtained with the join from BigQuery. Custom queries were written for some part of the visualizations.</p>
+
 
       </google-codelab-step>
     
-      <google-codelab-step label="Connecting Buckets - Big Query - Data Studio ⸦" duration="2">
-        
+      <google-codelab-step label="Connecting Buckets - Big Query - Data Studio ⸦" duration="3">
+        <p><strong>Google Data Studio</strong></p>
+<p>Now lets load some sample data into Google Data Studio. We will load the data into Google Storage bucket and access it in Google BigQuery to create data insights using SQL.</p>
+<ul>
+<li>Create an account on Google Cloud Storage</li>
+<li>In the Cloud Storage dashboard, first we need to create a new project</li>
+<li>Once the project is created make sure that the same project is selected in the Select a Project dropdown</li>
+<li>Click on ‘Create Bucket&#39;</li>
+<li>Give the name for the storage Bucket and access control information</li>
+<li>After the bucket gets created, we can load the sample data of SEVIR files and Storm Files</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/26e8a399a897a450.jpg"></p>
+<p><strong>Google BigQuery</strong></p>
+<p>After loading the data in Google Cloud Storage, we will access the data in Google Bigquery to query the information from the Storm data.</p>
+<ul>
+<li>Connect the data source from Google storage</li>
+<li>Join the Catalog.csv data with Storm data</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/201be5e4d6f98d3.jpg"></p>
+<ul>
+<li>Create sample queries in SQL to create dashboards in Google DataStudio</li>
+</ul>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/8aecdf7268fabca7.jpg"></p>
+
 
       </google-codelab-step>
     
       <google-codelab-step label="Final Dashboard 📖" duration="1">
-        
+        <p>After the query and dataset are processed and prepared in Bigquery, lets make some insightful dashboards on Google Data Studio</p>
+<p>The complete dashboard can be found at <a href="https://datastudio.google.com/reporting/eddf8618-5d26-4569-8a92-b4725634c71c" target="_blank">Storm Impact Analysis</a></p>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/f03b900794e66e23.jpg"></p>
+<p class="image-container"><img alt="GIF" style="width: 850.00px" src="img/466e9ef61715c132.jpg"></p>
+
 
       </google-codelab-step>
     
