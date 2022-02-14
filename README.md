@@ -3,7 +3,7 @@ Assignment_1
 
 A short description of the project.
 
-The SEVIR Ipynp with Sample ID can be found at notebooks/eir-sevir/example
+The SEVIR Ipynp with Sample ID can be found at https://github.com/BigDataArchitecture/Assignment1/blob/main/notebooks/eie-sevir/examples/SEVIR_Tutorial.ipynb
 
 Project Organization
 ------------
