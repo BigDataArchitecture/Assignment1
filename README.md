@@ -3,6 +3,8 @@ Assignment_1
 
 A short description of the project.
 
+The SEVIR Ipynp with Sample ID can be found at notebooks/eir-sevir/example
+
 Project Organization
 ------------
 
