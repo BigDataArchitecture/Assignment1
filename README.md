@@ -3,12 +3,40 @@ Assignment 1
 
 Live Github Page: https://bigdataarchitecture.github.io/Assignment1/
 
-A short description of the project.
+Introduction
+==============================
+As part of the first assignment of DAMG 7245 we had to review and understand the data of SEVIR and Storm dataset. After getting accustomed to the SEVIR and Storm dataset we executed the following steps mentioned.
 
+* Download the SEVIR HDF5 files and Storm csv files for event id 835047 from Amazon S3 bucket
+* Redo the SEVIR tutorial for event id 835047 for better understanding
+* Download the Catalogue.csv and Storm files csv for that specific data range and upload the files on Google Cloud Storage Bucket
+* Access this storage bucket from Google Bigquery to create Subqueries and Views. Perform join between the CATALOG.csv and Storm file.
+* Use Google Datastudio to generate insights about the STORM dataset
+
+Requirements
+==============================
+* Python 3.7
+* Jupyter Notebooks
+* AWS Account credentials
+* Google Cloud Account
+
+SEVIR Tutorial
+==============================
+The SEVIR tutorial can be found at :
+
+https://nbviewer.jupyter.org/github/MIT-AI-Accelerator/eie-sevir/blob/master/examples/SEVIR_Tutorial.ipynb
+
+The corresponding event id for Storm dataset can be found from the following website of NOAA:
+https://www.ncdc.noaa.gov/stormevents/ftp.jsp
+
+SEVIR tutorial for event ID : 835047
 The SEVIR Ipynp with Sample ID can be found at https://github.com/BigDataArchitecture/Assignment1/blob/main/notebooks/eie-sevir/examples/SEVIR_Tutorial.ipynb
 
 To generate the sample.h5 file for above IPYNP the code can be found at
 https://github.com/BigDataArchitecture/Assignment1/blob/main/notebooks/SEVIR_Data.ipynb
+
+
+
 
 Requirements make a folder SEVIR in the current directory 
 
