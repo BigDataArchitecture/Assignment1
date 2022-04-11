@@ -87,4 +87,4 @@ Project Organization
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
 
-Contribution: Parth 60% Sree 20% Ankana 20%
+Contribution: Parth 33% Sree 33% Ankana 33%
